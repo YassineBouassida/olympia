@@ -61,6 +61,7 @@ const Drawer = (props) => {
           renderContent={renderContent}
           onChange={updateSections}
           keyExtractor={(item, index) => index}
+          underlayColor={Colors.Primary}
         />
       </View>
     </SafeAreaView>
