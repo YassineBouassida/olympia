@@ -39,7 +39,7 @@ const Header = (props) => {
     );
   };
   return (
-    <SafeAreaView>
+    <SafeAreaView style={Styles.safeAreaView} edges={["top", "right"]}>
       <View style={{ ...Styles.view, ...props.style }}>
         <BackButton></BackButton>
         <TouchableOpacity
@@ -68,6 +68,7 @@ const Header = (props) => {
   );
 };
 const Styles = StyleSheet.create({
+  safeAreaView: {},
   view: {
     backgroundColor: Colors.Primary,
     alignItems: "center",

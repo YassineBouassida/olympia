@@ -4,7 +4,7 @@ import Typo from "../../constants/typo";
 import Colors from "../../constants/colors";
 const H2 = (props) => {
   return (
-    <View>
+    <View style={Styles.container}>
       <Text style={{ ...Styles.scoped, ...props.style }}>{props.children}</Text>
 
       <View style={Styles.borderLine}></View>
@@ -12,6 +12,9 @@ const H2 = (props) => {
   );
 };
 const Styles = StyleSheet.create({
+  container: {
+    width: "100%",
+  },
   scoped: {
     fontSize: Typo.X_large,
     fontFamily: "metropolisSemiBold",
