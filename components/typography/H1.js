@@ -27,7 +27,7 @@ const Styles = StyleSheet.create({
     borderBottomWidth: 3,
     alignSelf: "flex-start",
     zIndex: 1,
-    paddingRight: 5,
+    paddingHorizontal: 5,
   },
   borderLine: {
     borderTopColor: Colors.BorderLine,

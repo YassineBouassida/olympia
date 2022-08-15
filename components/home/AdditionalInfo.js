@@ -24,17 +24,19 @@ const AdditionalInfo = (props) => {
           {props.info.link.text}
         </Pre>
         <View style={Styles.topThree}>
-          {props.info.top3.map((player) => {
-            return (
-              <View style={Styles.rankLine} key={player.rank}>
-                <Small viewStyle={Styles.rankContainer} style={Styles.rank}>
-                  {player.rank}
-                </Small>
-                <H3 style={{ textAlign: "left" }}>{player.name}</H3>
-                <Pre>{player.goals}</Pre>
-              </View>
-            );
-          })}
+          <View style={{ width: "100%" }}>
+            {props.info.top3.map((player) => {
+              return (
+                <View style={Styles.rankLine} key={player.rank}>
+                  <Small viewStyle={Styles.rankContainer} style={Styles.rank}>
+                    {player.rank}
+                  </Small>
+                  <H3 style={{ textAlign: "left" }}>{player.name}</H3>
+                  <Pre>{player.goals}</Pre>
+                </View>
+              );
+            })}
+          </View>
         </View>
       </View>
     </View>
@@ -48,8 +50,6 @@ const Styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: "center",
     justifyContent: "space-between",
-    flexDirection: "row",
-    flexWrap: "wrap",
   },
   representer: {
     width: "100%",
@@ -57,7 +57,12 @@ const Styles = StyleSheet.create({
   },
   stats: {
     flex: 3,
-    marginLeft: 20,
+    marginLeft: 0,
+    width: "100%",
+  },
+  topThree: {
+    alignItems: "flex-start",
+    width: "100%",
   },
   rankLine: {
     flexDirection: "row",

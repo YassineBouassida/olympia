@@ -5,4 +5,10 @@ export default {
   White: "#E4E5E5",
   BorderLine: "#B2BEBE",
   GreyText: "#71797E",
+  Info: "blue",
+  Success: "green",
+  Warning: "red",
+  top: "gold",
+  medium: "yellow",
+  bottom: "black",
 };

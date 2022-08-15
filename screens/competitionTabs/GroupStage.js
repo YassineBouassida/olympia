@@ -12,21 +12,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 // import Dummy data
-import { stagesList } from "../../dummyData/games";
+import { stagesList } from "../../dummyData/groupStage";
 
 // import constants
 import Colors from "../../constants/colors";
 //Import custom components
 import Row from "../../components/UI/Row";
+import Table from "../../components/UI/Table";
 import Card from "../../components/UI/Card";
 import H3 from "../../components/typography/H3";
 import H1 from "../../components/typography/H1";
 import Pre from "../../components/typography/Pre";
 import MatchCard from "../../components/competitionParts/MatchCard";
 
-const Games = (props) => {
+const GroupStage = (props) => {
   const insets = useSafeAreaInsets();
-  const [selectedStage, setSelectedStage] = useState(stagesList[0]);
+  const [selectedStage, setSelectedStage] = useState({ item: "All" });
   //  Go to next stage
   const goToNextStage = () => {
     let currentId = selectedStage.id;
@@ -56,48 +57,103 @@ const Games = (props) => {
   };
   //On change declaration
   function onChange(index) {
-    setSelectedStage(stagesList.find((stage) => stage.item === index));
+    if (index == "All") {
+      setSelectedStage({ item: "All", id: "ALL" });
+    } else setSelectedStage(stagesList.find((stage) => stage.item === index));
   }
-  const renderSummary = () => {
-    if (!selectedStage.summary) return null;
-    else {
+  //Render list of stages groups and matches
+  const renderStagesList = () => {
+    if (selectedStage.matches) {
       return (
         <View>
-          <H1>Summary</H1>
-          <Row style={Styles.summary}>
-            <Card style={Styles.summaryComponent}>
-              <View style={Styles.sumComponentContainer}>
-                <Pre>Completed Games</Pre>
-                <H3 style={{ color: Colors.Primary }}>
-                  {selectedStage.summary.completedMatches}
-                </H3>
-              </View>
-            </Card>
-            {Object.values(selectedStage.summary).map((val, index) => {
-              if (index > 0) {
-                return (
-                  <Card style={Styles.summaryComponent} key={index + "sum"}>
-                    <View style={Styles.sumComponentContainer}>
-                      <Image
-                        source={{ uri: val.url, width: 40, height: 40 }}
-                      ></Image>
-                      <H3>{val.nbr}</H3>
-                    </View>
-                  </Card>
-                );
-              }
-            })}
-          </Row>
+          <View style={Styles.tableGroup}>
+            <H1>{selectedStage.item}</H1>
+            <Table data={selectedStage.data} headers={tableHeaders}></Table>
+          </View>
+
+          {selectedStage.matches.map((match, index) => {
+            return <MatchCard stats={match} key={index}></MatchCard>;
+          })}
         </View>
       );
+    } else {
+      return stagesList.map((group, index) => {
+        return (
+          <View key={group.id} style={Styles.tableGroup}>
+            <H1>{group.item}</H1>
+            <Table data={group.data} headers={tableHeaders}></Table>
+          </View>
+        );
+      });
     }
   };
+  const tableHeaders = [
+    {
+      flex: 1,
+      text: "#",
+      ref: "rank",
+      type: "text",
+    },
+    {
+      flex: 4,
+      text: "Team",
+      ref: "team",
+      type: "elem",
+    },
+    {
+      flex: 1,
+      text: "Pts",
+      ref: "points",
+      type: "text",
+    },
+    {
+      flex: 1,
+      text: "P",
+      ref: "playedMatches",
+      type: "text",
+    },
+    {
+      flex: 1,
+      text: "W",
+      ref: "wonMatches",
+      type: "text",
+    },
+
+    {
+      flex: 1,
+      text: "D",
+      ref: "drawMatches",
+      type: "text",
+    },
+    {
+      flex: 1,
+      text: "L",
+      ref: "lostMatches",
+      type: "text",
+    },
+    {
+      flex: 1,
+      text: "GF",
+      ref: "goalFor",
+      type: "text",
+    },
+    {
+      flex: 1,
+      text: "GA",
+      ref: "goalAgainst",
+      type: "text",
+    },
+    {
+      flex: 1,
+      text: "GD",
+      ref: "goalDifference",
+      type: "text",
+    },
+  ];
+
   return (
     <NativeBaseProvider>
-      <SafeAreaView
-        style={{ paddingBottom: insets.bottom }}
-        edges={["bottom", "left"]}
-      >
+      <SafeAreaView style={{ paddingBottom: insets.bottom }}>
         <Row style={Styles.header}>
           <TouchableOpacity onPress={goToPreviousStage}>
             <Ionicons
@@ -110,7 +166,7 @@ const Games = (props) => {
           <Select
             selectedValue={selectedStage.item}
             minWidth="70%"
-            placeholder="Choose Service"
+            placeholder="ALL"
             _selectedItem={{
               bg: Colors.Primary,
               _text: { color: Colors.White },
@@ -122,7 +178,7 @@ const Games = (props) => {
             bgColor={Colors.Primary}
             onValueChange={onChange}
           >
-            {stagesList.map((stage, index) => {
+            {[...stagesList, { item: "All", id: "ALL" }].map((stage, index) => {
               return (
                 <Select.Item
                   label={stage.item}
@@ -141,20 +197,17 @@ const Games = (props) => {
             />
           </TouchableOpacity>
         </Row>
-        <ScrollView>
-          {selectedStage.matches &&
-            selectedStage.matches.map((match, index) => {
-              return <MatchCard stats={match} key={index}></MatchCard>;
-            })}
-
-          {Summary()}
-        </ScrollView>
+        <ScrollView style={Styles.scrollView}>{renderStagesList()}</ScrollView>
       </SafeAreaView>
     </NativeBaseProvider>
   );
 };
 const Styles = StyleSheet.create({
   safeView: {},
+  scrollView: {},
+  tableGroup: {
+    marginVertical: 10,
+  },
   summary: {
     flexWrap: "wrap",
     marginTop: 20,
@@ -174,7 +227,7 @@ const Styles = StyleSheet.create({
     zIndex: 1,
   },
   header: {
-    height: 80,
+    height: 60,
     backgroundColor: Colors.Primary,
     justifyContent: "space-around",
     alignItems: "center",
@@ -182,4 +235,4 @@ const Styles = StyleSheet.create({
     marginTop: 3,
   },
 });
-export default Games;
+export default GroupStage;

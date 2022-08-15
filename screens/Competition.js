@@ -4,6 +4,10 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 const Tab = createMaterialTopTabNavigator();
 // import tabs
 import Games from "./competitionTabs/Games";
+import GroupStage from "./competitionTabs/GroupStage";
+import KnockOutStage from "./competitionTabs/KnockOutStage";
+import Teams from "./competitionTabs/Teams";
+import Players from "./competitionTabs/Players";
 import Global from "./competitionTabs/Global";
 //Import constants
 import Colors from "../constants/colors";
@@ -15,7 +19,7 @@ const Competition = (props) => {
         swipeEnabled: true,
         tabBarScrollEnabled: true,
         tabBarIndicatorStyle: {
-          backgroundColor: Colors.Primary,
+          backgroundColor: Colors.GreyText,
           height: 3,
         },
       }}
@@ -37,10 +41,10 @@ const Competition = (props) => {
         }}
       />
       <Tab.Screen name="Games" component={Games} />
-      <Tab.Screen name="Group Stage" component={Games} />
-      <Tab.Screen name="Knock Out Stage" component={Games} />
-      <Tab.Screen name="Teams" component={Games} />
-      <Tab.Screen name="Players" component={Games} />
+      <Tab.Screen name="Group Stage" component={GroupStage} />
+      <Tab.Screen name="Knock Out Stage" component={KnockOutStage} />
+      <Tab.Screen name="Teams" component={Teams} />
+      <Tab.Screen name="Players" component={Players} />
     </Tab.Navigator>
   );
 };

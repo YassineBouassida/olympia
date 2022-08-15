@@ -24,7 +24,7 @@ import H1 from "../../components/typography/H1";
 import Pre from "../../components/typography/Pre";
 import MatchCard from "../../components/competitionParts/MatchCard";
 
-const Games = (props) => {
+const KnockOutStage = (props) => {
   const insets = useSafeAreaInsets();
   const [selectedStage, setSelectedStage] = useState(stagesList[0]);
   //  Go to next stage
@@ -147,7 +147,7 @@ const Games = (props) => {
               return <MatchCard stats={match} key={index}></MatchCard>;
             })}
 
-          {Summary()}
+          {renderSummary()}
         </ScrollView>
       </SafeAreaView>
     </NativeBaseProvider>
@@ -182,4 +182,4 @@ const Styles = StyleSheet.create({
     marginTop: 3,
   },
 });
-export default Games;
+export default KnockOutStage;

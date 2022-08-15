@@ -72,10 +72,10 @@ const Styles = StyleSheet.create({
     backgroundColor: Colors.Primary,
     height: "100%",
     paddingTop: 70,
+    paddingHorizontal: 10,
   },
   headLinkContainer: {
     paddingVertical: 20,
-    paddingHorizontal: 10,
     justifyContent: "space-between",
     borderBottomColor: Colors.Alpha,
     borderBottomWidth: 0.5,
