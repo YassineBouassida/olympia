@@ -147,7 +147,7 @@ const Games = (props) => {
               return <MatchCard stats={match} key={index}></MatchCard>;
             })}
 
-          {Summary()}
+          {renderSummary()}
         </ScrollView>
       </SafeAreaView>
     </NativeBaseProvider>

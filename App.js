@@ -1,28 +1,28 @@
 import React from "react";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { StyleSheet } from "react-native";
 import AppLoading from "expo-app-loading";
 
 import { useFonts } from "expo-font";
 import Colors from "./constants/colors";
+import { Provider } from "react-redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import ReduxThunk from "redux-thunk";
 
 //import dummy data
-import { menu } from "./dummyData/menu";
+//import { menu } from "./dummyData/menu";
+//redux imports & config
+
+import menuReducer from "./store/reducers/menu";
+
+const rootReducers = combineReducers({
+  menu: menuReducer,
+});
+const store = createStore(rootReducers, applyMiddleware(ReduxThunk));
 //Navigation imports and constants
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-const Stack = createDrawerNavigator();
-const Drawer = createDrawerNavigator();
+import NavigationWrapper from "./navigation/index";
 
-// Custom Screens import
-import Home from "./screens/Home";
-import Competition from "./screens/Competition";
-
-// Custom components import
-import Header from "./components/layout/Header";
-import CustomDrawer from "./components/layout/Drawer";
 export default () => {
   //  Initializing the app and loading fonts
   let [fontsLoaded] = useFonts({
@@ -39,36 +39,11 @@ export default () => {
   // Waiting for fonts to load
 
   return (
-    <SafeAreaProvider style={Styles.safeView}>
-      <NavigationContainer>
-        <Drawer.Navigator
-          drawerContent={(props) => <CustomDrawer {...props} list={menu} />}
-          screenOptions={{ header: (props) => <Header {...props}></Header> }}
-          useLegacyImplementation
-          initialRouteName="Home"
-        >
-          <Drawer.Screen name="Home" component={Home} />
-          {
-            // Map menu headers
-            menu.map((link) => {
-              if (link.editions) {
-                //Map menu sub headers and render them
-                return link.editions.map((edition) => {
-                  return (
-                    <Drawer.Screen
-                      name={edition.name_en}
-                      key={edition.id}
-                      component={Competition}
-                      initialParams={{ ...edition }}
-                    />
-                  );
-                });
-              }
-            })
-          }
-        </Drawer.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <SafeAreaProvider style={Styles.safeView}>
+        <NavigationWrapper></NavigationWrapper>
+      </SafeAreaProvider>
+    </Provider>
   );
 };
 const Styles = StyleSheet.create({

@@ -7,7 +7,6 @@ import { Text, StyleSheet, View } from "react-native";
 import Row from "../UI/Row";
 import Pre from "../typography/Pre";
 // import constants
-import Typo from "../../constants/typo";
 import Colors from "../../constants/colors";
 const Drawer = (props) => {
   const { state } = props;
