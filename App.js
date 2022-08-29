@@ -7,19 +7,13 @@ import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
 import Colors from "./constants/colors";
 import { Provider } from "react-redux";
-import { createStore, combineReducers, applyMiddleware } from "redux";
-import ReduxThunk from "redux-thunk";
 
 //import dummy data
 //import { menu } from "./dummyData/menu";
 //redux imports & config
 
-import menuReducer from "./store/reducers/menu";
+import { store } from "./store";
 
-const rootReducers = combineReducers({
-  menu: menuReducer,
-});
-const store = createStore(rootReducers, applyMiddleware(ReduxThunk));
 //Navigation imports and constants
 import NavigationWrapper from "./navigation/index";
 

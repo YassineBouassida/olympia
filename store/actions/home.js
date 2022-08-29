@@ -25,7 +25,7 @@ export const fetchClubs = () => {
     const url = `${baseUrl}/tots`;
     try {
       const response = await axios.get(url);
-      dispatch({ type: SET_PLAYERS, clubs: response.data });
+      dispatch({ type: SET_CLUBS, clubs: response.data });
     } catch (err) {
       console.log("error ", err);
 
@@ -38,7 +38,10 @@ export const fetchMostValuablePlayer = () => {
     const url = `${baseUrl}/mvp`;
     try {
       const response = await axios.get(url);
-      dispatch({ type: SET_MOST_VALUABLE_PLAYER, players: response.data });
+      dispatch({
+        type: SET_MOST_VALUABLE_PLAYER,
+        mostValuablePlayer: response.data,
+      });
     } catch (err) {
       console.log("error ", err);
 
@@ -51,7 +54,10 @@ export const fetchMostValuableYoungPlayer = () => {
     const url = `${baseUrl}/mvyp`;
     try {
       const response = await axios.get(url);
-      dispatch({ type: SET_MOST_VALUABLE_PLAYER, players: response.data });
+      dispatch({
+        type: SET_MOST_VALUABLE_YOUNG_PLAYER,
+        mostValuableYoungKeeper: response.data,
+      });
     } catch (err) {
       console.log("error ", err);
 
@@ -64,7 +70,10 @@ export const fetchMostValuableGoalPlayer = () => {
     const url = `${baseUrl}/mvgk`;
     try {
       const response = await axios.get(url);
-      dispatch({ type: SET_MOST_VALUABLE_GOAL_PLAYER, players: response.data });
+      dispatch({
+        type: SET_MOST_VALUABLE_GOAL_PLAYER,
+        mostValuableGoalKeeper: response.data,
+      });
     } catch (err) {
       console.log("error ", err);
 
