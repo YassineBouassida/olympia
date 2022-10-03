@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, ScrollView, StyleSheet, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Colors from "../constants/colors";
 
 //Dummy date Import
 import {
@@ -25,24 +26,33 @@ import ProfileStats from "../components/home/ProfileStats";
 import Stadium from "../components/layout/stadium/Stadium";
 import { connect } from "react-redux";
 const Home = (props) => {
+  const [isLoadingData, setIsLoadingData] = useState(true);
+
   useEffect(() => {
     props.fetchAllData().then((res) => {
-      console.log("players ", props.players);
       console.log("clubs ", props.clubs);
-      console.log("mostValuablePlayer ", props.mostValuablePlayer);
-      console.log("mostValuableGoalKeeper ", props.mostValuableGoalKeeper);
+      //console.log("mostValuablePlayer ", props.mostValuablePlayer);
+      //console.log("mostValuableGoalKeeper ", props.mostValuableGoalKeeper);
+      setIsLoadingData(false);
     });
   }, []);
+  if (isLoadingData) {
+    return (
+      <View style={Styles.centered}>
+        <ActivityIndicator size="large" color={Colors.Primary} />
+      </View>
+    );
+  }
   return (
     <SafeAreaView edges={["bottom", "left"]}>
       <ScrollView style={Styles.ScrollView}>
         <View style={Styles.specialStats}>
           <H1>Special Stats</H1>
-          {/* <SpecialStats stats={players}></SpecialStats>
-          <SpecialStats stats={clubs}></SpecialStats>
+          <SpecialStats stats={props.players}></SpecialStats>
+          <SpecialStats stats={props.players}></SpecialStats>
           <H1>Olympia Rewards Top 5 Leagues</H1>
           <ProfileStats stats={mostValuablePlayer}></ProfileStats>
-          <ProfileStats stats={mostValuableGoalKeeper}></ProfileStats>
+          {/* <ProfileStats stats={mostValuableGoalKeeper}></ProfileStats>
           <ProfileStats stats={mostValuableGoalKeeper}></ProfileStats>
           <Stadium title={"Team Of The Season"}></Stadium>
           <H1>Season Overview</H1> */}

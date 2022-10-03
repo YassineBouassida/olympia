@@ -3,6 +3,7 @@ const baseUrl = "https://olympia-api.phoinix.ai";
 
 export const SET_PLAYERS = "SET_PLAYERS";
 export const SET_CLUBS = "SET_CLUBS";
+export const SET_TEAM_OF_THE_SEASON = "SET_TEAM_OF_THE_SEASON";
 export const SET_MOST_VALUABLE_PLAYER = "SET_MOST_VALUABLE_PLAYER";
 export const SET_MOST_VALUABLE_YOUNG_PLAYER = "SET_MOST_VALUABLE_YOUNG_PLAYER";
 export const SET_MOST_VALUABLE_GOAL_PLAYER = "SET_MOST_VALUABLE_GOAL_PLAYER";
@@ -26,6 +27,22 @@ export const fetchClubs = () => {
     try {
       const response = await axios.get(url);
       dispatch({ type: SET_CLUBS, clubs: response.data });
+    } catch (err) {
+      console.log("error ", err);
+
+      throw err;
+    }
+  };
+};
+export const fetchTeamOfTheSeason = () => {
+  return async (dispatch) => {
+    const url = `${baseUrl}/tots`;
+    try {
+      const response = await axios.get(url);
+      dispatch({
+        type: SET_TEAM_OF_THE_SEASON,
+        teamOfTheSeason: response.data,
+      });
     } catch (err) {
       console.log("error ", err);
 

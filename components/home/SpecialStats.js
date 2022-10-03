@@ -4,18 +4,21 @@ import { StyleSheet, View } from "react-native";
 import AdditionalInfo from "./AdditionalInfo";
 import Avatar from "../UI/Avatar";
 import Card from "../UI/Card";
+import { useSelector } from "react-redux";
 
 const SpecialStats = (props) => {
-  const [selectedStat, setselectedStat] = useState(1);
+  const lang = useSelector((state) => state.metadata.lang);
+  const [selectedStat, setselectedStat] = useState(0);
   const onPressAvatar = (playerId) => {
     setselectedStat(playerId);
   };
   const hasAdditionalInfo = (stat) => {
-    if (!stat.additionalInfo) return;
+    if (!stat.standings) return;
     else {
       return (
         <AdditionalInfo
-          info={{ ...stat.additionalInfo, url: stat.url }}
+          info={{ ...stat, url: stat.player_picture }}
+          lang={lang}
         ></AdditionalInfo>
       );
     }
@@ -24,17 +27,17 @@ const SpecialStats = (props) => {
     <Card style={{ ...Styles.card, ...props.style }}>
       <View style={Styles.gridView}>
         {props.stats &&
-          props.stats.map((stat) => {
+          props.stats.map((stat, index) => {
             return (
-              <View key={stat.key} style={Styles.avatarContainer}>
+              <View key={index} style={Styles.avatarContainer}>
                 <Avatar
-                  onPress={() => onPressAvatar(stat.key)}
+                  onPress={() => onPressAvatar(index)}
                   style={[Styles.avatar]}
                   imageStyle={Styles.avatarImage}
                   originalWidth={180}
                   originalHeight={180}
-                  url={stat.url}
-                  selected={selectedStat === stat.key}
+                  url={stat.player_picture}
+                  selected={selectedStat === index}
                 ></Avatar>
               </View>
             );

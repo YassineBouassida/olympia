@@ -18,21 +18,27 @@ const AdditionalInfo = (props) => {
         />
       </View>
       <View style={Styles.stats}>
-        <H3 style={{ textAlign: "center" }}>{props.info.title}</H3>
-        <Pre style={{ textAlign: "center" }}>{props.info.description}</Pre>
+        <H3 style={{ textAlign: "center" }}>
+          {props.info[`player_name_${props.lang.type}`]}
+        </H3>
+        <Pre style={{ textAlign: "center" }}>
+          {props.info[`title_${props.lang.key}`]}
+        </Pre>
         <Pre style={{ textAlign: "center", textDecorationLine: "underline" }}>
-          {props.info.link.text}
+          {props.info[`competition_${props.lang.key}`]}
         </Pre>
         <View style={Styles.topThree}>
           <View style={{ width: "100%" }}>
-            {props.info.top3.map((player) => {
+            {props.info.standings.map((player) => {
               return (
                 <View style={Styles.rankLine} key={player.rank}>
                   <Small viewStyle={Styles.rankContainer} style={Styles.rank}>
                     {player.rank}
                   </Small>
-                  <H3 style={{ textAlign: "left" }}>{player.name}</H3>
-                  <Pre>{player.goals}</Pre>
+                  <H3 style={{ textAlign: "left" }}>
+                    {player[`name_${props.lang.type}`]}
+                  </H3>
+                  <Pre>{player.total}</Pre>
                 </View>
               );
             })}
