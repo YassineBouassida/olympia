@@ -4,8 +4,6 @@ const baseUrl = "https://olympia-api.phoinix.ai";
 export const SET_MENU = "SET_MENU";
 
 export const fetchMenu = () => {
-  console.log("fetchMenu lanched  ", process.env.BASE_URL);
-
   return async (dispatch) => {
     const url = `${baseUrl}/menu`;
     try {

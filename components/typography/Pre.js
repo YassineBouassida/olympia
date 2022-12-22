@@ -11,6 +11,7 @@ const Pre = (props) => {
 };
 const Styles = StyleSheet.create({
   scoped: {
+    fontVariant: ["small-caps"],
     fontSize: Typo.Medium,
     fontFamily: "metropolis",
     color: Colors.Text,

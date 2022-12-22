@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -6,13 +6,12 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { Select, NativeBaseProvider } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-// import Dummy data
-import { stagesList } from "../../dummyData/games";
 
 // import constants
 import Colors from "../../constants/colors";
@@ -23,43 +22,49 @@ import H3 from "../../components/typography/H3";
 import H1 from "../../components/typography/H1";
 import Pre from "../../components/typography/Pre";
 import MatchCard from "../../components/competitionParts/MatchCard";
-
+//Redux imports
+import { connect, useSelector, useDispatch } from "react-redux";
+import { fetchGames } from "../../store/actions/edition";
 const Games = (props) => {
   const insets = useSafeAreaInsets();
-  const [selectedStage, setSelectedStage] = useState(stagesList[0]);
+  const [selectedStage, setSelectedStage] = useState(0);
+  const lang = useSelector((state) => state.metadata.lang);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(props.route);
+    const id = props.route ? props.route.params.id : 0;
+
+    setIsLoadingData(true);
+    dispatch(fetchGames(id)).then(() => {
+      setIsLoadingData(false);
+    });
+  }, []);
+  if (isLoadingData) {
+    return (
+      <View style={Styles.centered}>
+        <ActivityIndicator size="large" color={Colors.Primary} />
+      </View>
+    );
+  }
   //  Go to next stage
   const goToNextStage = () => {
-    let currentId = selectedStage.id;
-    if (currentId == undefined) return;
-    let nextStageIndex = null;
-    Object.values(stagesList).map((stage, index) => {
-      if (stage.id === currentId) {
-        nextStageIndex =
-          index + 1 < Object.values(stagesList).length ? index + 1 : null;
-        nextStageIndex != null &&
-          setSelectedStage(Object.values(stagesList)[nextStageIndex]);
-      }
-    });
+    if (selectedStage == props.games.length - 1) setSelectedStage(0);
+    else setSelectedStage(selectedStage + 1);
   };
   //  Go to previous stage
   const goToPreviousStage = () => {
-    let currentId = selectedStage.id;
-    if (currentId == undefined) return;
-    let previousStageIndex = null;
-    Object.values(stagesList).map((stage, index) => {
-      if (stage.id === currentId) {
-        previousStageIndex = index > 0 ? index - 1 : null;
-        previousStageIndex != null &&
-          setSelectedStage(Object.values(stagesList)[previousStageIndex]);
-      }
-    });
+    if (selectedStage == 0) setSelectedStage(props.games.length - 1);
+    else setSelectedStage(selectedStage - 1);
   };
   //On change declaration
   function onChange(index) {
-    setSelectedStage(stagesList.find((stage) => stage.item === index));
+    setSelectedStage(index);
   }
   const renderSummary = () => {
-    if (!selectedStage.summary) return null;
+    let stats = props.games[selectedStage].stats;
+    if (!stats) return null;
     else {
       return (
         <View>
@@ -69,24 +74,77 @@ const Games = (props) => {
               <View style={Styles.sumComponentContainer}>
                 <Pre>Completed Games</Pre>
                 <H3 style={{ color: Colors.Primary }}>
-                  {selectedStage.summary.completedMatches}
+                  {stats.games_completed}
                 </H3>
               </View>
             </Card>
-            {Object.values(selectedStage.summary).map((val, index) => {
-              if (index > 0) {
-                return (
-                  <Card style={Styles.summaryComponent} key={index + "sum"}>
-                    <View style={Styles.sumComponentContainer}>
-                      <Image
-                        source={{ uri: val.url, width: 40, height: 40 }}
-                      ></Image>
-                      <H3>{val.nbr}</H3>
-                    </View>
-                  </Card>
-                );
-              }
-            })}
+            {/* Number of goals */}
+            <Card style={Styles.summaryComponent}>
+              <View style={Styles.sumComponentContainer}>
+                <Image
+                  source={{
+                    uri: "https://olympia.phoinix.ai/icos/G.png",
+                    width: 40,
+                    height: 40,
+                  }}
+                ></Image>
+                <H3>{stats.goals}</H3>
+              </View>
+            </Card>
+            {/* Number of Own goals */}
+
+            <Card style={Styles.summaryComponent}>
+              <View style={Styles.sumComponentContainer}>
+                <Image
+                  source={{
+                    uri: "https://olympia.phoinix.ai/icos/OG.png",
+                    width: 40,
+                    height: 40,
+                  }}
+                ></Image>
+                <H3>{stats.own_goals}</H3>
+              </View>
+            </Card>
+            {/* Number of Yellow cards */}
+
+            <Card style={Styles.summaryComponent}>
+              <View style={Styles.sumComponentContainer}>
+                <Image
+                  source={{
+                    uri: "https://olympia.phoinix.ai/icos/Y.png",
+                    width: 40,
+                    height: 40,
+                  }}
+                ></Image>
+                <H3>{stats.yellow_cards}</H3>
+              </View>
+            </Card>
+            {/* Number of Second Yellow cards */}
+            <Card style={Styles.summaryComponent}>
+              <View style={Styles.sumComponentContainer}>
+                <Image
+                  source={{
+                    uri: "https://olympia.phoinix.ai/icos/S.png",
+                    width: 40,
+                    height: 40,
+                  }}
+                ></Image>
+                <H3>{stats.second_yellow_cards}</H3>
+              </View>
+            </Card>
+            {/* Number of Red cards */}
+            <Card style={Styles.summaryComponent}>
+              <View style={Styles.sumComponentContainer}>
+                <Image
+                  source={{
+                    uri: "https://olympia.phoinix.ai/icos/R.png",
+                    width: 40,
+                    height: 40,
+                  }}
+                ></Image>
+                <H3>{stats.red_cards}</H3>
+              </View>
+            </Card>
           </Row>
         </View>
       );
@@ -108,7 +166,7 @@ const Games = (props) => {
           </TouchableOpacity>
 
           <Select
-            selectedValue={selectedStage.item}
+            selectedValue={selectedStage}
             minWidth="70%"
             placeholder="Choose Service"
             _selectedItem={{
@@ -122,12 +180,12 @@ const Games = (props) => {
             bgColor={Colors.Primary}
             onValueChange={onChange}
           >
-            {stagesList.map((stage, index) => {
+            {props.games.map((stage, index) => {
               return (
                 <Select.Item
-                  label={stage.item}
-                  value={stage.item}
-                  key={stage.id}
+                  label={stage[`title_${lang.key}`]}
+                  value={index}
+                  key={index}
                 />
               );
             })}
@@ -142,8 +200,8 @@ const Games = (props) => {
           </TouchableOpacity>
         </Row>
         <ScrollView>
-          {selectedStage.matches &&
-            selectedStage.matches.map((match, index) => {
+          {props.games[selectedStage].games &&
+            props.games[selectedStage].games.map((match, index) => {
               return <MatchCard stats={match} key={index}></MatchCard>;
             })}
 
@@ -182,4 +240,9 @@ const Styles = StyleSheet.create({
     marginTop: 3,
   },
 });
-export default Games;
+const mapStateToProps = (state) => {
+  return {
+    games: state.edition.games,
+  };
+};
+export default connect(mapStateToProps)(Games);

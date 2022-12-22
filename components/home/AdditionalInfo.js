@@ -1,11 +1,14 @@
 import React from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import Colors from "../../constants/colors";
+import { useNavigation } from "@react-navigation/native";
+
 //Custom components
 import H3 from "../typography/H3";
 import Pre from "../typography/Pre";
 import Small from "../typography/Small";
 const AdditionalInfo = (props) => {
+  const navigation = useNavigation();
   return (
     <View style={Styles.additionalInfo}>
       <View style={Styles.representer}>
@@ -29,17 +32,23 @@ const AdditionalInfo = (props) => {
         </Pre>
         <View style={Styles.topThree}>
           <View style={{ width: "100%" }}>
-            {props.info.standings.map((player) => {
+            {props.info.ranking.map((player) => {
               return (
-                <View style={Styles.rankLine} key={player.rank}>
+                <TouchableOpacity
+                  style={Styles.rankLine}
+                  key={player.rank}
+                  onPress={() => {
+                    navigation.navigate("Player", { id: player.player_id });
+                  }}
+                >
                   <Small viewStyle={Styles.rankContainer} style={Styles.rank}>
                     {player.rank}
                   </Small>
                   <H3 style={{ textAlign: "left" }}>
-                    {player[`name_${props.lang.type}`]}
+                    {player[`player_name_${props.lang.type}`]}
                   </H3>
-                  <Pre>{player.total}</Pre>
-                </View>
+                  <Pre>{player.value}</Pre>
+                </TouchableOpacity>
               );
             })}
           </View>

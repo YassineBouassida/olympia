@@ -17,24 +17,24 @@ import H2 from "../../typography/H2";
 import H3 from "../../typography/H3";
 import Pre from "../../typography/Pre";
 import PlayerInchor from "./PlayerAnchor";
+import { useSelector } from "react-redux";
 
-const image = { uri: "https://olympia.phoinix.ai/pictures/stadium.jpeg" };
+const image = require("../../../assets/img/Field.jpg");
 //const window = Dimensions.get("window");
 
-const ProfileStats = (props) => {
+const Stadium = (props) => {
+  const lang = useSelector((state) => state.metadata.lang);
+
   const [cardWidth, setCardWidth] = useState(0);
   const [playerCelWidth, setPlayerCelWidth] = useState(0);
-  const [playerAnchor, setPlayerAnchor] = useState({
-    note: "9.2",
-    anchorName: "Robert",
-    anchorUrl: "https://olympia.phoinix.ai/pictures/players/464.jpg",
-    flagUrl: "https://olympia.phoinix.ai/pictures/clubs/61.png",
-  });
 
   const getSize = (event, param) => {
     const { x, y, height, width } = event.nativeEvent.layout;
     setCardWidth(width - 20);
     setPlayerCelWidth((width - 40) / 4);
+  };
+  const getPosDetails = (pos) => {
+    return props.positions.find((p) => pos == p.position);
   };
   //   const [windowWidth, setWindowWidth] = useState(window.width);
   //   const [windowHeight, setWindowHeight] = useState(window.height);
@@ -60,8 +60,10 @@ const ProfileStats = (props) => {
         >
           <Row style={{ ...Styles.playersRow, ...Styles.striker }}>
             <PlayerInchor
+              pos="ST"
+              lang={lang}
               size={playerCelWidth}
-              details={playerAnchor}
+              details={getPosDetails("ST")}
               style={{
                 ...Styles.playerContainer,
               }}
@@ -78,29 +80,37 @@ const ProfileStats = (props) => {
           </Row>
           <Row style={{ ...Styles.playersRow, ...Styles.playMakers }}>
             <PlayerInchor
+              pos="LW"
+              lang={lang}
               size={playerCelWidth}
-              details={playerAnchor}
+              details={getPosDetails("LW")}
               style={{
                 ...Styles.playerContainer,
               }}
             ></PlayerInchor>
             <PlayerInchor
+              pos="CM-L"
+              lang={lang}
               size={playerCelWidth}
-              details={playerAnchor}
+              details={getPosDetails("CM-L")}
               style={{
                 ...Styles.playerContainer,
               }}
             ></PlayerInchor>
             <PlayerInchor
+              pos="CM-R"
+              lang={lang}
               size={playerCelWidth}
-              details={playerAnchor}
+              details={getPosDetails("CM-R")}
               style={{
                 ...Styles.playerContainer,
               }}
             ></PlayerInchor>
             <PlayerInchor
+              pos="RW"
+              lang={lang}
               size={playerCelWidth}
-              details={playerAnchor}
+              details={getPosDetails("RW")}
               style={{
                 ...Styles.playerContainer,
               }}
@@ -108,8 +118,10 @@ const ProfileStats = (props) => {
           </Row>
           <Row style={{ ...Styles.playersRow, ...Styles.central }}>
             <PlayerInchor
+              pos="CM"
+              lang={lang}
               size={playerCelWidth}
-              details={playerAnchor}
+              details={getPosDetails("CM")}
               style={{
                 ...Styles.playerContainer,
               }}
@@ -117,29 +129,37 @@ const ProfileStats = (props) => {
           </Row>
           <Row style={{ ...Styles.playersRow, ...Styles.defenders }}>
             <PlayerInchor
+              pos="LB"
+              lang={lang}
               size={playerCelWidth}
-              details={playerAnchor}
+              details={getPosDetails("LB")}
               style={{
                 ...Styles.playerContainer,
               }}
             ></PlayerInchor>
             <PlayerInchor
+              pos="CD-L"
+              lang={lang}
               size={playerCelWidth}
-              details={playerAnchor}
+              details={getPosDetails("CD-L")}
               style={{
                 ...Styles.playerContainer,
               }}
             ></PlayerInchor>
             <PlayerInchor
+              pos="CD-R"
+              lang={lang}
               size={playerCelWidth}
-              details={playerAnchor}
+              details={getPosDetails("CD-R")}
               style={{
                 ...Styles.playerContainer,
               }}
             ></PlayerInchor>
             <PlayerInchor
+              pos="RB"
+              lang={lang}
               size={playerCelWidth}
-              details={playerAnchor}
+              details={getPosDetails("RB")}
               style={{
                 ...Styles.playerContainer,
               }}
@@ -147,8 +167,10 @@ const ProfileStats = (props) => {
           </Row>
           <Row style={{ ...Styles.playersRow, ...Styles.goalKeeper }}>
             <PlayerInchor
+              pos="GK"
+              lang={lang}
               size={playerCelWidth}
-              details={playerAnchor}
+              details={getPosDetails("GK")}
               style={{
                 ...Styles.playerContainer,
               }}
@@ -166,13 +188,18 @@ const Styles = StyleSheet.create({
   stadiumContainer: {
     marginTop: 10,
     width: "100%",
+    paddingVertical: 15,
   },
   stadiumImage: {
     flex: 1,
+    paddingVertical: 25,
   },
   playerContainer: {
     marginHorizontal: 2,
     marginVertical: 10,
+    alignItems: "center",
+  },
+  playersRow: {
     alignItems: "center",
   },
   striker: {
@@ -220,4 +247,4 @@ const Styles = StyleSheet.create({
     top: -15,
   },
 });
-export default ProfileStats;
+export default Stadium;

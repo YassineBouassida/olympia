@@ -15,22 +15,60 @@ const CardsStatsCard = (props) => {
     <Card style={{ ...Styles.card, ...props.style }}>
       <H2>{props.stats.title}</H2>
       <Row style={Styles.globalNumbers}>
-        {props.stats.cards.map((card) => {
-          return (
-            <View style={Styles.number} key={card.key}>
-              <Row style={{ alignItems: "center" }}>
-                <H3 style={{ color: Colors.Primary }}>{card.number}</H3>
-                <Image
-                  source={{ uri: card.url, width: 30, height: 30 }}
-                ></Image>
-              </Row>
-              <Pre style={{ color: Colors.GreyText }}>{card.text}</Pre>
-              <Pre style={{ color: Colors.GreyText }}>
-                ({card.percentage} per game)
-              </Pre>
-            </View>
-          );
-        })}
+        <View style={Styles.number}>
+          <Row style={{ alignItems: "center" }}>
+            <H3 style={{ color: Colors.Primary }}>
+              {props.stats.yellow_cards}
+            </H3>
+            <Image
+              source={{
+                uri: "https://olympia.phoinix.ai/icos/Y.png",
+                width: 30,
+                height: 30,
+              }}
+            ></Image>
+          </Row>
+          <Pre style={{ color: Colors.GreyText }}>Yellow Cards</Pre>
+          <Pre style={{ color: Colors.GreyText }}>
+            ({props.stats.yellow_cards_per_game} per game)
+          </Pre>
+        </View>
+
+        <View style={Styles.number}>
+          <Row style={{ alignItems: "center" }}>
+            <H3 style={{ color: Colors.Primary }}>
+              {props.stats.second_yellow_cards}
+            </H3>
+            <Image
+              source={{
+                uri: "https://olympia.phoinix.ai/icos/S.png",
+                width: 30,
+                height: 30,
+              }}
+            ></Image>
+          </Row>
+          <Pre style={{ color: Colors.GreyText }}>Second Yellow Cards</Pre>
+          <Pre style={{ color: Colors.GreyText }}>
+            ({props.stats.second_yellow_cards_per_game} per game)
+          </Pre>
+        </View>
+
+        <View style={Styles.number}>
+          <Row style={{ alignItems: "center" }}>
+            <H3 style={{ color: Colors.Primary }}>{props.stats.red_cards}</H3>
+            <Image
+              source={{
+                uri: "https://olympia.phoinix.ai/icos/R.png",
+                width: 30,
+                height: 30,
+              }}
+            ></Image>
+          </Row>
+          <Pre style={{ color: Colors.GreyText }}>Yellow Cards</Pre>
+          <Pre style={{ color: Colors.GreyText }}>
+            ({props.stats.red_cards_per_game} per game)
+          </Pre>
+        </View>
       </Row>
     </Card>
   );

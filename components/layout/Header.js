@@ -24,6 +24,7 @@ const Header = (props) => {
     if (!props.navigation.canGoBack()) {
       return null;
     }
+
     return (
       <TouchableOpacity
         activeOpacity={0.6}

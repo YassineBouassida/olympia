@@ -17,9 +17,10 @@ const Styles = StyleSheet.create({
   },
   scoped: {
     fontSize: Typo.X_large,
-    fontFamily: "metropolisSemiBold",
     color: Colors.Primary,
+    fontWeight: "bold",
     paddingVertical: 10,
+    fontVariant: ["small-caps"],
   },
 
   borderLine: {

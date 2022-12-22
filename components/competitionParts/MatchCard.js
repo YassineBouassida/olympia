@@ -12,7 +12,12 @@ import H3 from "../typography/H3";
 import Pre from "../typography/Pre";
 
 const MatchCard = (props) => {
-  const findMatchFinishType = (number) => {
+  const findMatchFinishType = () => {
+    let number = props.stats.with_penalty_shoot_out
+      ? 3
+      : props.stats.with_extra_time
+      ? 2
+      : 1;
     switch (number) {
       case 1:
         return "Regular Time";
@@ -28,8 +33,13 @@ const MatchCard = (props) => {
         break;
     }
   };
-  const renderMatchPartsPoint = (number) => {
+  const renderMatchPartsPoint = () => {
     let elements = [];
+    let number = props.stats.with_penalty_shoot_out
+      ? 3
+      : props.stats.with_extra_time
+      ? 2
+      : 1;
     for (let index = 3; index > 0; index--) {
       const element = (
         <View
@@ -44,6 +54,14 @@ const MatchCard = (props) => {
     }
     return elements;
   };
+  getTeamStatus = (pos, result) => {
+    if (result == 0) return "draw";
+    if (result == pos) {
+      return "win";
+    } else {
+      return "lost";
+    }
+  };
   return (
     <Card style={{ ...Styles.card, ...props.style }}>
       <Row style={Styles.opponents}>
@@ -53,41 +71,63 @@ const MatchCard = (props) => {
             style={[Styles.avatar, { width: 40, height: 40 }]}
             originalWidth={40}
             originalHeight={40}
-            url={props.stats.host.flagUrl}
+            url={props.stats.team1_icon}
             selected={false}
           ></Avatar>
-          <Pre>{props.stats.host.name}</Pre>
+          <Pre>{props.stats.team1_name}</Pre>
         </View>
         {/* Result part */}
-        <View>
+        <View style={Styles.results}>
           {/* match Parts Number */}
-          <Row style={Styles.matchPartsNumber}>
-            {renderMatchPartsPoint(props.stats.matchPartsNumber)}
-          </Row>
+          <Row style={Styles.matchPartsNumber}>{renderMatchPartsPoint()}</Row>
           {/* match Result Goals Number */}
           <Row style={Styles.matchResult}>
             <View
-              style={[Styles.resultStatus, Styles[props.stats.host.status]]}
+              style={[
+                Styles.resultStatus,
+                Styles[
+                  getTeamStatus(1, props.stats.result || props.stats.qualified)
+                ],
+              ]}
             >
               <Pre style={Styles.resultStatusText}>
-                {props.stats.host.status[0].toUpperCase()}
+                {getTeamStatus(
+                  1,
+                  props.stats.result || props.stats.qualified
+                )[0].toUpperCase()}
               </Pre>
             </View>
-            <H3>{props.stats.host.goals}</H3>
+            <H3>
+              {props.stats.timeline
+                ? props.stats.timeline[props.stats.timeline.length - 1].score1
+                : props.stats.score1}
+            </H3>
             <H3> : </H3>
-            <H3>{props.stats.opponent.goals}</H3>
+            <H3>
+              {props.stats.timeline
+                ? props.stats.timeline[props.stats.timeline.length - 1].score2
+                : props.stats.score2}
+            </H3>
             <View
-              style={[Styles.resultStatus, Styles[props.stats.opponent.status]]}
+              style={[
+                Styles.resultStatus,
+                Styles[
+                  getTeamStatus(2, props.stats.result || props.stats.qualified)
+                ],
+              ]}
             >
               <Pre style={Styles.resultStatusText}>
-                {props.stats.opponent.status[0].toUpperCase()}
+                {getTeamStatus(
+                  2,
+                  props.stats.result || props.stats.qualified
+                )[0].toUpperCase()}
               </Pre>
             </View>
           </Row>
           {/* match Time type */}
           <Row style={Styles.matchFinishType}>
             <Pre style={Styles.matchFinishTypeText}>
-              {findMatchFinishType(props.stats.matchPartsNumber)}
+              {findMatchFinishType()}
             </Pre>
           </Row>
         </View>
@@ -97,21 +137,27 @@ const MatchCard = (props) => {
             style={[Styles.avatar, { width: 40, height: 40 }]}
             originalWidth={40}
             originalHeight={40}
-            url={props.stats.opponent.flagUrl}
+            url={props.stats.team2_icon}
             selected={false}
           ></Avatar>
-          <Pre>{props.stats.opponent.name}</Pre>
+          <Pre>{props.stats.team2_name}</Pre>
         </View>
       </Row>
       {/* Match details section */}
-      <Row style={Styles.details}>
+      <Row style={{ ...Styles.details, borderTopColor: props.stats.color }}>
         <View style={Styles.detailsComp}>
           <Ionicons name="calendar-outline" size={24} color="black" />
-          <Pre>{props.stats.date}</Pre>
+          <Pre>
+            {props.stats.datetime ? props.stats.datetime.slice(0, 8) : ""}
+          </Pre>
         </View>
         <View style={Styles.detailsComp}>
           <Ionicons name="time-outline" size={24} color="black" />
-          <Pre>{props.stats.time}</Pre>
+          <Pre>
+            {props.stats.datetime
+              ? props.stats.datetime.slice(10, props.stats.datetime.length)
+              : ""}
+          </Pre>
         </View>
         <View style={Styles.detailsComp}>
           <MaterialCommunityIcons
@@ -140,6 +186,10 @@ const Styles = StyleSheet.create({
   },
   club: {
     alignItems: "center",
+    width: "33%",
+  },
+  results: {
+    width: "33%",
   },
   matchResult: {
     justifyContent: "center",
@@ -190,7 +240,6 @@ const Styles = StyleSheet.create({
     textAlign: "center",
   },
   details: {
-    borderTopColor: Colors.BorderLine,
     borderTopWidth: 2,
     width: "100%",
     paddingVertical: 10,

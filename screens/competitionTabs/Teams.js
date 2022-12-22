@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -22,8 +23,31 @@ import H3 from "../../components/typography/H3";
 import H1 from "../../components/typography/H1";
 import Pre from "../../components/typography/Pre";
 import TopFive from "../../components/competitionParts/TopFiveCard";
-
+//Redux imports
+import { connect, useSelector, useDispatch } from "react-redux";
+import { fetchTeams } from "../../store/actions/edition";
 const Teams = (props) => {
+  const [selectedStage, setSelectedStage] = useState(0);
+  const lang = useSelector((state) => state.metadata.lang);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const id = props.route ? props.route.params.id : 0;
+
+    setIsLoadingData(true);
+    dispatch(fetchTeams(id)).then(() => {
+      setIsLoadingData(false);
+    });
+  }, []);
+  if (isLoadingData) {
+    return (
+      <View style={Styles.centered}>
+        <ActivityIndicator size="large" color={Colors.Primary} />
+      </View>
+    );
+  }
+
   const tableHeaders = [
     {
       flex: 1,
@@ -75,4 +99,9 @@ const Styles = StyleSheet.create({
     zIndex: 1,
   },
 });
-export default Teams;
+const mapStateToProps = (state) => {
+  return {
+    teams: state.edition.teams,
+  };
+};
+export default connect(mapStateToProps)(Teams);

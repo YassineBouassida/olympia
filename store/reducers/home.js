@@ -5,11 +5,13 @@ import {
   SET_MOST_VALUABLE_YOUNG_PLAYER,
   SET_MOST_VALUABLE_PLAYER,
   SET_MOST_VALUABLE_GOAL_PLAYER,
+  SET_GAME_BAR,
 } from "../actions/home";
 
 const initialState = {
   players: [],
   clubs: [],
+  gamebar: [],
   teamOfTheSeason: [],
   mostValuableYoungPlayer: {},
   mostValuablePlayer: {},
@@ -17,6 +19,11 @@ const initialState = {
 };
 export default (state = initialState, action) => {
   switch (action.type) {
+    case SET_GAME_BAR:
+      return {
+        ...state,
+        gamebar: action.gamebar,
+      };
     case SET_PLAYERS:
       return {
         ...state,
@@ -35,7 +42,7 @@ export default (state = initialState, action) => {
     case SET_MOST_VALUABLE_YOUNG_PLAYER:
       return {
         ...state,
-        mostValuablePlayer: action.mostValuableYoungPlayer,
+        mostValuableYoungPlayer: action.mostValuableYoungPlayer,
       };
     case SET_MOST_VALUABLE_PLAYER:
       return {

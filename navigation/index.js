@@ -12,11 +12,14 @@ import * as menuActions from "../store/actions/menu";
 //Navigation imports and constants
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Drawer = createDrawerNavigator();
-
+const Stack = createNativeStackNavigator(); // Stack contains Screen & Navigator properties
 // Custom Screens import
 import Home from "../screens/Home";
 import Competition from "../screens/Competition";
+import Player from "../screens/Player";
+import Team from "../screens/Team";
 
 // Custom components import
 import Header from "../components/layout/Header";
@@ -49,12 +52,29 @@ export default () => {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        drawerContent={(props) => <CustomDrawer {...props} list={menu} />}
+        drawerContent={(props) => {
+          const filteredProps = {
+            ...props,
+            state: {
+              ...props.state,
+              routeNames: props.state.routeNames.filter((routeName) => {
+                routeName !== "Player" && routeName !== "Team";
+              }),
+              routes: props.state.routes.filter(
+                (route) => route.name !== "Player" && route.name !== "Team"
+              ),
+            },
+          };
+          return <CustomDrawer {...filteredProps} list={menu} />;
+        }}
         screenOptions={{ header: (props) => <Header {...props}></Header> }}
         useLegacyImplementation
         initialRouteName="Home"
       >
         <Drawer.Screen name="Home" component={Home} />
+        <Drawer.Screen name="Player" component={Player} />
+        <Drawer.Screen name="Team" component={Team} />
+
         {
           // Map menu headers
           menu.map((link) => {

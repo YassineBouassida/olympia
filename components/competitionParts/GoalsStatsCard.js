@@ -22,7 +22,7 @@ const GoalsStatsCard = (props) => {
             alignItems: "center",
           }}
         >
-          <H3>{props.stats.goalsNumber}</H3>
+          <H3>{props.stats.goals}</H3>
           <Image
             source={{
               uri: "https://olympia.phoinix.ai/icos/G.png",
@@ -32,24 +32,62 @@ const GoalsStatsCard = (props) => {
           ></Image>
         </Row>
         <Pre style={{ color: Colors.GreyText, textAlign: "center" }}>
-          Goals scored ({props.stats.avg} per game)
+          Goals scored ({props.stats.goals_per_game} per game)
         </Pre>
       </View>
       <Row style={Styles.positions}>
-        {props.stats.positions.map((position) => {
-          return (
-            <View style={Styles.position} key={position.key}>
-              <Image
-                source={{
-                  uri: position.url,
-                  width: position.size,
-                  height: position.size,
-                }}
-              ></Image>
-              <H3 style={{ color: Colors.Primary }}>{position.number}</H3>
-            </View>
-          );
-        })}
+        <View style={Styles.position}>
+          <Image
+            source={{
+              uri: "https://olympia.phoinix.ai/icos/G_with_L.png",
+              width: 30,
+              height: 30,
+            }}
+          ></Image>
+          <H3 style={{ color: Colors.Primary }}>{props.stats.left_goals}</H3>
+        </View>
+        <View style={Styles.position}>
+          <Image
+            source={{
+              uri: "https://olympia.phoinix.ai/icos/G_with_R.png",
+              width: 30,
+              height: 30,
+            }}
+          ></Image>
+          <H3 style={{ color: Colors.Primary }}>{props.stats.right_goals}</H3>
+        </View>
+        <View style={Styles.position}>
+          <Image
+            source={{
+              uri: "https://olympia.phoinix.ai/icos/G_with_H.png",
+              width: 30,
+              height: 30,
+            }}
+          ></Image>
+          <H3 style={{ color: Colors.Primary }}>{props.stats.head_goals}</H3>
+        </View>
+        <View style={Styles.position}>
+          <Image
+            source={{
+              uri: "https://olympia.phoinix.ai/icos/G_with_B.png",
+              width: 30,
+              height: 30,
+            }}
+          ></Image>
+          <H3 style={{ color: Colors.Primary }}>
+            {props.stats.other_part_goals}
+          </H3>
+        </View>
+        <View style={Styles.position}>
+          <Image
+            source={{
+              uri: "https://olympia.phoinix.ai/icos/OG.png",
+              width: 30,
+              height: 30,
+            }}
+          ></Image>
+          <H3 style={{ color: Colors.Primary }}>{props.stats.own_goals}</H3>
+        </View>
       </Row>
     </Card>
   );

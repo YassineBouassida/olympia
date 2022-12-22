@@ -13,7 +13,7 @@ const SpecialStats = (props) => {
     setselectedStat(playerId);
   };
   const hasAdditionalInfo = (stat) => {
-    if (!stat.standings) return;
+    if (!stat.ranking) return;
     else {
       return (
         <AdditionalInfo

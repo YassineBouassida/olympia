@@ -1,5 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 //Constant import
 import Colors from "../../constants/colors";
 //Custom components Import
@@ -9,16 +11,15 @@ import Row from "../UI/Row";
 import H2 from "../typography/H2";
 import H3 from "../typography/H3";
 import Pre from "../typography/Pre";
+import { useSelector } from "react-redux";
 
 const ProfileStats = (props) => {
-  const getNoteStyle = (note) => {
-    return note > 9
-      ? { ...Styles.note, ...Styles.superNote }
-      : { ...Styles.note };
-  };
+  const lang = useSelector((state) => state.metadata.lang);
+  const navigation = useNavigation();
+
   return (
     <Card style={{ ...Styles.card, ...props.style }}>
-      <H2>{props.stats.title}</H2>
+      <H2>{props.title}</H2>
       <Row style={Styles.profile}>
         <View style={Styles.representer}>
           <Avatar
@@ -26,31 +27,57 @@ const ProfileStats = (props) => {
             imageStyle={Styles.avatarImage}
             originalWidth={180}
             originalHeight={180}
-            url={props.stats.representerUrl}
+            url={props.stats.picture}
             selected={true}
           ></Avatar>
-          <H3 style={{ color: Colors.Primary }}>{props.stats.profileName}</H3>
+          <H3 style={{ color: Colors.Primary }}>
+            {props.stats[`name_${lang.type}`]}
+          </H3>
           <Row style={Styles.flags}>
-            {props.stats.flags.map((flag) => {
-              return (
-                <Avatar
-                  style={[Styles.flag]}
-                  imageStyle={Styles.flagImage}
-                  originalWidth={60}
-                  originalHeight={60}
-                  url={flag.url}
-                  key={flag.key}
-                ></Avatar>
-              );
-            })}
+            <Avatar
+              style={[Styles.flag]}
+              imageStyle={Styles.flagImage}
+              originalWidth={60}
+              originalHeight={60}
+              url={props.stats.team_club_logo}
+              onPress={() => {
+                navigation.navigate("Team", { id: props.stats.team_club_id });
+              }}
+            ></Avatar>
+            <Avatar
+              style={[Styles.flag]}
+              imageStyle={Styles.flagImage}
+              originalWidth={60}
+              originalHeight={60}
+              url={props.stats.team_nation_logo}
+              onPress={() => {
+                navigation.navigate("Team", { id: props.stats.team_nation_id });
+              }}
+            ></Avatar>
           </Row>
         </View>
         <View style={Styles.stats}>
-          {props.stats.ratings.map((rating) => {
+          <Row style={Styles.rating}>
+            <Pre style={{ textAlign: "right" }}>OLYMPIA RATING</Pre>
+            <H3 style={{ ...Styles.note, ...Styles.superNote }}>
+              {props.stats.rating}
+            </H3>
+          </Row>
+          <Row style={Styles.rating}>
+            <Pre style={{ textAlign: "right" }}>MOTM Awards</Pre>
+            <H3 style={{ ...Styles.note, ...Styles.normalNote }}>
+              {props.stats.motm_awards}
+            </H3>
+          </Row>
+          {props.stats.attributes.map((attr, index) => {
             return (
-              <Row style={Styles.rating} key={rating.key}>
-                <Pre style={{ textAlign: "right" }}>{rating.name}</Pre>
-                <H3 style={getNoteStyle(rating.note)}>{rating.note}</H3>
+              <Row style={Styles.rating} key={index}>
+                <Pre style={{ textAlign: "right" }}>
+                  {attr[`name_${lang.key}`]}
+                </Pre>
+                <H3 style={{ ...Styles.note, ...Styles.normalNote }}>
+                  {attr.value}
+                </H3>
               </Row>
             );
           })}
@@ -115,6 +142,8 @@ const Styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     marginLeft: 10,
+  },
+  normalNote: {
     color: Colors.Primary,
   },
   superNote: {

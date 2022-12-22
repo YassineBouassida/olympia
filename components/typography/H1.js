@@ -17,10 +17,10 @@ const H1 = (props) => {
 const Styles = StyleSheet.create({
   scoped: {
     fontSize: Typo.Xx_large,
-    fontFamily: "metropolisBlack",
     fontWeight: "bold",
     color: Colors.Primary,
     paddingVertical: 10,
+    fontVariant: ["small-caps"],
   },
   headline: {
     borderBottomColor: Colors.Primary,

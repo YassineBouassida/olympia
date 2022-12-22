@@ -126,11 +126,11 @@ const Table = (props) => {
   return (
     <View style={Styles.container}>
       <View style={{ width: "100%" }}>{renderSearchable()}</View>
-      <FlatList
+      {/* <FlatList
         scrollEnabled={false}
         horizontal={false}
         data={props.searchable ? filtredData : data}
-        style={{ width: "90%" }}
+        style={Styles.table}
         keyExtractor={(item, index) => index + ""}
         ListHeaderComponent={tableHeader}
         renderItem={({ item, index }) => {
@@ -140,25 +140,20 @@ const Table = (props) => {
                 ...Styles.tableRow,
                 backgroundColor:
                   index % 2 == 1 ? Colors.BorderLine : Colors.Alpha,
-                borderLeftColor: item.status
-                  ? Colors[item.status.note]
-                  : "transparent",
-                borderLeftWidth: item.status ? 3 : 0,
+                borderLeftColor: item.Color,
+                borderLeftWidth: 3,
               }}
             >
-              {Object.keys(item).map((itemKey, index) => {
-                const itemValue = item[itemKey];
-                let columnHeader = columns.find(
-                  (column) => column.ref == itemKey
-                );
-                if (itemValue.note) return;
+              {columns.map((column, index) => {
+                const itemValue = item[column.ref];
+
                 if (itemValue.url) {
                   return (
                     <View
-                      key={index + itemKey}
+                      key={index + column.ref}
                       style={{
-                        ...Styles.columnRowTxt,
-                        flex: columnHeader.flex,
+                        ...Styles.columnElement,
+                        flex: column.flex,
                         alignItems: "center",
                         justifyContent: "center",
                       }}
@@ -176,10 +171,11 @@ const Table = (props) => {
                 } else {
                   return (
                     <Text
-                      key={index + itemKey}
+                      key={index + column.ref}
                       style={{
                         ...Styles.columnRowTxt,
-                        flex: columnHeader.flex,
+                        flex: column.flex,
+                        fontWeight: column.ref == "Pts" ? "bold" : "normal",
                       }}
                     >
                       {itemValue}
@@ -190,7 +186,64 @@ const Table = (props) => {
             </View>
           );
         }}
-      />
+      /> */}
+      <View style={Styles.table}>
+        {tableHeader()}
+        {data.map((item, index) => {
+          return (
+            <View
+              key={`index_${index}`}
+              style={{
+                ...Styles.tableRow,
+                backgroundColor:
+                  index % 2 == 1 ? Colors.BorderLine : Colors.Alpha,
+                borderLeftColor: item.Color,
+                borderLeftWidth: 3,
+              }}
+            >
+              {columns.map((column, index) => {
+                const itemValue = item[column.ref];
+
+                if (itemValue.url) {
+                  return (
+                    <View
+                      key={index + column.ref}
+                      style={{
+                        ...Styles.columnElement,
+                        flex: column.flex,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Avatar
+                        style={[Styles.avatar, { width: 30, height: 30 }]}
+                        originalWidth={30}
+                        originalHeight={30}
+                        url={itemValue.url}
+                        selected={false}
+                      ></Avatar>
+                      <Text>{itemValue.text}</Text>
+                    </View>
+                  );
+                } else {
+                  return (
+                    <Text
+                      key={index + column.ref}
+                      style={{
+                        ...Styles.columnRowTxt,
+                        flex: column.flex,
+                        fontWeight: column.ref == "Pts" ? "bold" : "normal",
+                      }}
+                    >
+                      {itemValue}
+                    </Text>
+                  );
+                }
+              })}
+            </View>
+          );
+        })}
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -213,6 +266,11 @@ const Styles = StyleSheet.create({
     borderTopStartRadius: 10,
     height: 50,
     paddingHorizontal: 3,
+  },
+  table: {
+    width: "90%",
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.Primary,
   },
   searchableInput: {
     height: 40,
@@ -237,8 +295,12 @@ const Styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
+  columnElement: {
+    width: "28%",
+    textAlign: "center",
+  },
   columnRowTxt: {
-    width: "20%",
+    width: "8%",
     textAlign: "center",
   },
 });

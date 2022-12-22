@@ -16,28 +16,25 @@ const playersStatsCard = (props) => {
       <H2>{props.stats.title}</H2>
       <Row style={Styles.globalNumbers}>
         <View style={Styles.number}>
-          <H3 style={{ color: Colors.Primary }}>{props.stats.usedPlayers}</H3>
+          <H3 style={{ color: Colors.Primary }}>{props.stats.players}</H3>
           <Pre style={{ color: Colors.GreyText }}>Used Players</Pre>
         </View>
         <View style={Styles.number}>
           <H3 style={{ color: Colors.Primary }}>
-            {props.stats.differentNationalities}
+            {props.stats.different_leagues}
           </H3>
           <Pre style={{ color: Colors.GreyText }}>Different Nationalities</Pre>
         </View>
       </Row>
       <Row style={Styles.nationalities}>
-        {props.stats.nationalities.map((nationality) => {
+        {props.stats.most_occurences.map((nationality, key) => {
           return (
-            <View style={Styles.nationality} key={nationality.key}>
+            <View style={Styles.nationality} key={key}>
               <Avatar
-                style={[
-                  Styles.avatar,
-                  { width: nationality.size, height: nationality.size },
-                ]}
-                originalWidth={nationality.size}
-                originalHeight={nationality.size}
-                url={nationality.url}
+                style={[Styles.avatar, { width: 30, height: 30 }]}
+                originalWidth={30}
+                originalHeight={30}
+                url={nationality.flag}
                 selected={false}
               ></Avatar>
               <Row style={Styles.nationalityNumbers}>

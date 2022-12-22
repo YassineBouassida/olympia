@@ -29,29 +29,34 @@ const Games = (props) => {
     <SafeAreaView edges={["bottom", "left"]}>
       <ScrollView style={Styles.view}>
         <Pre style={{ color: Colors.Primary, alignSelf: "flex-end" }}>
-          Completed games : 18
+          Completed games : {props.stats.completed_games}
         </Pre>
         <Progress.Bar
-          progress={18 / 51}
+          progress={props.stats.completed_games / props.stats.all_games}
           color={Colors.Primary}
           height={15}
           width={null}
         >
-          <Text style={Styles.progressText}>18/51</Text>
+          <Text style={Styles.progressText}>
+            {props.stats.completed_games}/{props.stats.all_games}
+          </Text>
         </Progress.Bar>
         <Pre style={{ color: Colors.Text, alignSelf: "flex-end" }}>
-          Scheduled games : 51
+          Scheduled games : {props.stats.all_games}
         </Pre>
 
         <H1>Key Stats</H1>
-        <PlayersStatCard stats={playersStatsCardData}></PlayersStatCard>
-        <GoalsStatsCard stats={goalsStatsCardData}></GoalsStatsCard>
-        <CardsStatsCard stats={cardsStatsCardData}></CardsStatsCard>
+        <PlayersStatCard stats={props.stats}></PlayersStatCard>
+        <GoalsStatsCard stats={props.stats}></GoalsStatsCard>
+        <CardsStatsCard stats={props.stats}></CardsStatsCard>
         <H1>Olympia Rewards</H1>
-        <ProfileStats stats={mostValuablePlayer}></ProfileStats>
-        <ProfileStats stats={mostValuableGoalKeeper}></ProfileStats>
-        <ProfileStats stats={mostValuableGoalKeeper}></ProfileStats>
-        <Stadium title={"Team Of The Season"}></Stadium>
+        <ProfileStats stats={props.mostValuableYoungPlayer}></ProfileStats>
+        <ProfileStats stats={props.mostValuablePlayer}></ProfileStats>
+        <ProfileStats stats={props.mostValuableGoalKeeper}></ProfileStats>
+        <Stadium
+          title={"Team Of The Season"}
+          positions={props.teamOfTheSeason}
+        ></Stadium>
       </ScrollView>
     </SafeAreaView>
   );
